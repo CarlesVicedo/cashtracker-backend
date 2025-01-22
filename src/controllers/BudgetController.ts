@@ -3,7 +3,19 @@ import Budget from "../models/Budget"
 
 export class BudgetControler {
     static getAll = async (req: Request, res: Response) => {
-        console.log('desde /api/budgets')
+        try {
+            const budgets = await Budget.findAll({
+                order: [
+                    ['createdAt', 'DESC']
+                ],
+                // TODO: Filter by user
+            })
+
+            res.json(budgets)
+        } catch (error) {
+            // console.log(error)
+            res.status(500).json({error: "Something broke"})
+        }
     }
     
     static create = async (req: Request, res: Response) => {
