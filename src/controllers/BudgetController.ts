@@ -1,4 +1,5 @@
 import type { Request, Response } from "express"
+import Budget from "../models/Budget"
 
 export class BudgetControler {
     static getAll = async (req: Request, res: Response) => {
@@ -6,7 +7,15 @@ export class BudgetControler {
     }
     
     static create = async (req: Request, res: Response) => {
-        console.log('desde POST /api/budgets')
+        try {
+            const budget = new Budget(req.body)
+            await budget.save()
+            res.status(201).json('Budget registered')
+
+        } catch (error) {
+            // console.log(error)
+            res.status(500).json({error: "Something broke"})
+        }
     }
     
     static getById = async (req: Request, res: Response) => {
