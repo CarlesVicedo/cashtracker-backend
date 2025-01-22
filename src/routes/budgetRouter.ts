@@ -24,7 +24,18 @@ router.get('/:id',
     handleInputErrors,
     BudgetControler.getById)
 
-router.put('/:id', BudgetControler.updateById)
+router.put('/:id', 
+    param('id')
+        .isInt().withMessage('Not valid ID')
+        .custom(value => value > 0).withMessage('Not valid ID'),
+    body('name')
+        .notEmpty().withMessage('Budget name is mandatory'),
+    body('amount')
+        .notEmpty().withMessage('Budget amount is mandatory')
+        .isNumeric().withMessage('Not valid amount')
+        .custom(value => value > 0).withMessage('Budget must be higher than 0.'),
+    handleInputErrors,
+    BudgetControler.updateById)
 
 router.delete('/:id', BudgetControler.deleteById)
 
