@@ -1,6 +1,22 @@
 import express from 'express' 
 import colors from 'colors'
 import morgan from 'morgan'
+import { db } from './config/db'
+
+const connectDB = async () => {
+    try {
+        await db.authenticate()
+        db.sync()
+        console.log(colors.blue.bold('Connected to the DB'))
+
+    } catch (error) {
+        // console.log(error)
+        console.log(colors.red.bold('Failed connection to the DB'))
+
+    }
+}
+
+connectDB()
 
 const app = express()
 
