@@ -2,7 +2,7 @@ import { Router } from "express"
 import { body, param } from "express-validator"
 import { BudgetControler } from "../controllers/BudgetController"
 import { handleInputErrors } from "../middleware/validation"
-import { validateBudgetId } from "../middleware/budget"
+import { validateBudgetExists, validateBudgetId } from "../middleware/budget"
 
 const router = Router()
 
@@ -21,6 +21,7 @@ router.post('/',
 
 router.get('/:id', 
     validateBudgetId,
+    validateBudgetExists,
     BudgetControler.getById
 )
 
