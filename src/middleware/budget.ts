@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { param, validationResult } from "express-validator";
+import { body, param, validationResult } from "express-validator";
 import Budget from "../models/Budget";
 
 declare global {
@@ -44,4 +44,17 @@ export const validateBudgetExists: RequestHandler = async (req, res, next) => {
         // console.log(error)
         res.status(500).json({error: "Something broke"})
     }
+}
+
+export const validateBudgetInput: RequestHandler = async (req, res, next) => {
+    await body('name')
+        .notEmpty().withMessage('Budget name is mandatory')
+        .run(req)
+
+    await body('amount')
+        .notEmpty().withMessage('Budget amount is mandatory')
+        .isNumeric().withMessage('Not valid amount')
+        .custom(value => value > 0).withMessage('Budget must be higher than 0.')
+        .run(req)
+    next()
 }
