@@ -1,10 +1,13 @@
 import { Router } from "express"
-import { body, param } from "express-validator"
+import { body } from "express-validator"
 import { BudgetControler } from "../controllers/BudgetController"
 import { handleInputErrors } from "../middleware/validation"
 import { validateBudgetExists, validateBudgetId } from "../middleware/budget"
 
 const router = Router()
+
+router.param('budgetId', validateBudgetId)
+router.param('budgetId', validateBudgetExists)
 
 router.get('/', BudgetControler.getAll)
 
@@ -19,15 +22,11 @@ router.post('/',
     BudgetControler.create
 )
 
-router.get('/:id', 
-    validateBudgetId,
-    validateBudgetExists,
+router.get('/:budgetId', 
     BudgetControler.getById
 )
 
-router.put('/:id', 
-    validateBudgetId,
-    validateBudgetExists,
+router.put('/:budgetId', 
     body('name')
         .notEmpty().withMessage('Budget name is mandatory'),
     body('amount')
@@ -38,11 +37,6 @@ router.put('/:id',
     BudgetControler.updateById
 )
 
-router.delete('/:id', 
-    validateBudgetId,
-    validateBudgetExists,
-    handleInputErrors,
-    BudgetControler.deleteById
-)
+router.delete('/:budgetId', BudgetControler.deleteById)
 
 export default router
