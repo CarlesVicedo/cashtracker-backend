@@ -27,6 +27,7 @@ router.get('/:id',
 
 router.put('/:id', 
     validateBudgetId,
+    validateBudgetExists,
     body('name')
         .notEmpty().withMessage('Budget name is mandatory'),
     body('amount')
@@ -39,6 +40,7 @@ router.put('/:id',
 
 router.delete('/:id', 
     validateBudgetId,
+    validateBudgetExists,
     handleInputErrors,
     BudgetControler.deleteById
 )
