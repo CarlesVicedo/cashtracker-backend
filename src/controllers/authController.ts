@@ -33,6 +33,19 @@ export class AuthControler {
     }
 
     static confirmAccount = async (req: Request, res: Response) => {
-        console.log('Desde confirmAccount')
+        const { token } = req.body
+
+        const user = await User.findOne({where: {token}})
+        if(!user) {
+            const error = new Error('Invalid token')
+            res.status(401).json({error: error.message})
+            return
+        }
+
+        user.confirmed = true
+        user.token = null
+        await user.save()
+
+        res.json("Account confirmed")
     }
 }
