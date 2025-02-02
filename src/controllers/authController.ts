@@ -31,4 +31,8 @@ export class AuthControler {
             res.status(500).json({error: 'Something broke'})
         }
     }
+
+    static confirmAccount = async (req: Request, res: Response) => {
+        console.log('Desde confirmAccount')
+    }
 }
